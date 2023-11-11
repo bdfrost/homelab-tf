@@ -35,15 +35,13 @@ resource "proxmox_vm_qemu" "k3s-db" {
     size    = var.mariadb_database_size
   }
 
-  os_type    = "cloud-init"
-  ipconfig0  = "ip=dhcp" # auto-assign a IP address for the machine
-  nameserver = "1.1.1.1"
-  ciuser     = var.ciuser
-  sshkeys    = var.ssh_public_key
-  # sshkeys         = file(var.ssh_public_key_path)
+  os_type         = "cloud-init"
+  ipconfig0       = "ip=dhcp" # auto-assign a IP address for the machine
+  nameserver      = "1.1.1.1"
+  ciuser          = var.ciuser
+  sshkeys         = var.ssh_public_key
   ssh_user        = var.ciuser
   ssh_private_key = var.ssh_private_key
-  # ssh_private_key = file(var.ssh_private_key_path)
 
   # Specify connection variables for remote execution
   connection {
@@ -110,15 +108,13 @@ resource "proxmox_vm_qemu" "k3s-nodes" {
     size    = var.disk_size
   }
 
-  os_type    = "cloud-init"
-  ipconfig0  = "ip=dhcp" # auto-assign a IP address for the machine
-  nameserver = "1.1.1.1"
-  ciuser     = var.ciuser
-  sshkeys    = var.ssh_public_key
-  # sshkeys         = file(var.ssh_public_key_path)
+  os_type         = "cloud-init"
+  ipconfig0       = "ip=dhcp" # auto-assign a IP address for the machine
+  nameserver      = "1.1.1.1"
+  ciuser          = var.ciuser
+  sshkeys         = var.ssh_public_key
   ssh_user        = var.ciuser
   ssh_private_key = var.ssh_private_key
-  # ssh_private_key = file(var.ssh_private_key_path)
 
   # Specify connection variables for remote execution
   connection {
