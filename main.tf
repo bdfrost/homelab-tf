@@ -53,9 +53,9 @@ resource "proxmox_vm_qemu" "k3s-db" {
   ipconfig0       = "ip=dhcp" # auto-assign a IP address for the machine
   nameserver      = "1.1.1.1"
   ciuser          = var.ciuser
-  sshkeys         = file(local_sensitive_file.ssh_public_key_file.filename)
+  sshkeys         = local_sensitive_file.ssh_public_key_file.filename
   ssh_user        = var.ciuser
-  ssh_private_key = file(local_sensitive_file.ssh_private_key_file.filename)
+  ssh_private_key = local_sensitive_file.ssh_private_key_file.filename
 
   # Specify connection variables for remote execution
   connection {
