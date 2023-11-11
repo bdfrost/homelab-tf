@@ -1,12 +1,12 @@
-module "k3s" {
-  source                = "diogosilva30/k3s/proxmox"
-  version               = "1.11.0"
-  proxmox_vm_image_name = "ubuntu-jammy-cloudinit-template"
-  ssh_private_key_path  = var.ssh_private_key_path
-  ciuser                = var.ciuser
-  cluster_name          = var.cluster_name
-  ssh_public_key_path   = var.ssh_public_key_path
-}
+# module "k3s" {
+#   source                = "diogosilva30/k3s/proxmox"
+#   version               = "1.11.0"
+#   proxmox_vm_image_name = "ubuntu-jammy-cloudinit-template"
+#   ssh_private_key_path  = var.ssh_private_key_path
+#   ciuser                = var.ciuser
+#   cluster_name          = var.cluster_name
+#   ssh_public_key_path   = var.ssh_public_key_path
+# }
 
 terraform {
   cloud {
