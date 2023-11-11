@@ -30,10 +30,6 @@ resource "proxmox_vm_qemu" "k3s-db" {
   desc        = "Kubernetes MariaDB database. User: ${local.db_user} | Password: ${local.db_password} | DB: ${local.db}"
   target_node = "proxmox"
   onboot      = var.onboot
-  depends_on = [
-    local_sensitive_file.ssh_public_key_file,
-    local_sensitive_file.ssh_private_key_file,
-  ]
 
   # Hardware configuration
   agent   = 1
@@ -53,9 +49,9 @@ resource "proxmox_vm_qemu" "k3s-db" {
   ipconfig0       = "ip=dhcp" # auto-assign a IP address for the machine
   nameserver      = "1.1.1.1"
   ciuser          = var.ciuser
-  sshkeys         = local_sensitive_file.ssh_public_key_file.filename
+  sshkeys         = var.ssh_public_key
   ssh_user        = var.ciuser
-  ssh_private_key = local_sensitive_file.ssh_private_key_file.filename
+  ssh_private_key = var.ssh_private_key
 
   # Specify connection variables for remote execution
   connection {
@@ -125,9 +121,9 @@ resource "proxmox_vm_qemu" "k3s-nodes" {
   ipconfig0       = "ip=dhcp" # auto-assign a IP address for the machine
   nameserver      = "1.1.1.1"
   ciuser          = var.ciuser
-  sshkeys         = local_sensitive_file.ssh_public_key_file.filename
+  sshkeys         = var.ssh_public_key
   ssh_user        = var.ciuser
-  ssh_private_key = local_sensitive_file.ssh_private_key_file.filename
+  ssh_private_key = var.ssh_private_key
 
   # Specify connection variables for remote execution
   connection {
