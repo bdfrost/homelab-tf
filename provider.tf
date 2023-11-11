@@ -9,6 +9,12 @@ module "k3s" {
 }
 
 terraform {
+  cloud {
+    organization = "froste"
+    workspaces {
+      name = "homelab-tf"
+    }
+  }
   required_providers {
     # https://github.com/Telmate/terraform-provider-proxmox
     proxmox = {
@@ -19,6 +25,7 @@ terraform {
       source = "hashicorp/aws"
     }
   }
+  required_version = ">= 1.1.0"
 }
 
 provider "proxmox" {
