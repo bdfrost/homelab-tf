@@ -125,9 +125,9 @@ resource "proxmox_vm_qemu" "k3s-nodes" {
   ipconfig0       = "ip=dhcp" # auto-assign a IP address for the machine
   nameserver      = "1.1.1.1"
   ciuser          = var.ciuser
-  sshkeys         = file(local_sensitive_file.ssh_public_key_file.filename)
+  sshkeys         = local_sensitive_file.ssh_public_key_file.filename
   ssh_user        = var.ciuser
-  ssh_private_key = file(local_sensitive_file.ssh_private_key_file.filename)
+  ssh_private_key = local_sensitive_file.ssh_private_key_file.filename
 
   # Specify connection variables for remote execution
   connection {
@@ -152,7 +152,7 @@ resource "proxmox_vm_qemu" "k3s-nodes" {
         k3sup install --ip ${self.ssh_host} \
           --k3s-extra-args "${var.k3s_extra_args}" \
           --user ${self.ssh_user} \
-          --ssh-key "${file(local_sensitive_file.ssh_private_key_file.filename)}" \
+          --ssh-key "${local_sensitive_file.ssh_private_key_file.filename}" \
           --k3s-version ${var.k3s_version} \
           --datastore="${local.datastore_endpoint}" \
           --token=${random_id.k3s_token.b64_std}
@@ -161,7 +161,7 @@ resource "proxmox_vm_qemu" "k3s-nodes" {
         k3sup join --ip ${self.ssh_host} \
           --user ${self.ssh_user} \
           --server-user ${self.ssh_user} \
-          --ssh-key "${file(local_sensitive_file.ssh_private_key_file.filename)}" \
+          --ssh-key "${local_sensitive_file.ssh_private_key_file.filename}" \
           --k3s-version ${var.k3s_version} \
           --server-ip ${proxmox_vm_qemu.k3s-nodes[0].ssh_host}
       fi
@@ -192,7 +192,7 @@ data "external" "kubeconfig" {
   program = [
     "ssh",
     "-i",
-    "${file(local_sensitive_file.ssh_private_key_file.filename)}",
+    "${local_sensitive_file.ssh_private_key_file.filename}",
     "-o",
     "UserKnownHostsFile=/dev/null",
     "-o",
