@@ -30,7 +30,10 @@ resource "proxmox_vm_qemu" "k3s-db" {
   desc        = "Kubernetes MariaDB database. User: ${local.db_user} | Password: ${local.db_password} | DB: ${local.db}"
   target_node = "proxmox"
   onboot      = var.onboot
-  depends_on  = [local_sensitive_file.ssh_public_key_file, local_sensitive_file.ssh_private_key_file]
+  depends_on = [
+    "${local_sensitive_file.ssh_public_key_file.filename}",
+    "${local_sensitive_file.ssh_private_key_file}"
+  ]
 
   # Hardware configuration
   agent   = 1
