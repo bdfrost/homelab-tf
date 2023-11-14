@@ -38,6 +38,14 @@ variable "k3s_version" {
   default     = "v1.26.3+k3s1"
 }
 
+variable "project_id" {
+  type = string
+}
+
+variable "target_node" {
+  type = string
+}
+
 # Hardware configuration for Kubernetes nodes
 variable "disk_size" {
   description = "The disk size for each Kubernetes node. E.g. '50G'"

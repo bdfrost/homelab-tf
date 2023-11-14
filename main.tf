@@ -1,3 +1,18 @@
+resource "random_id" "bucket_prefix" {
+  byte_length = 8
+}
+
+resource "google_storage_bucket" "default" {
+  name          = "${random_id.bucket_prefix.hex}-bucket-tfstate"
+  force_destroy = false
+  location      = "US"
+  storage_class = "STANDARD"
+  project       = var.project_id
+  versioning {
+    enabled = true
+  }
+}
+
 # Generate a random cluster token for k3s
 resource "random_id" "k3s_token" {
   byte_length = 35
@@ -14,10 +29,10 @@ locals {
   db_password = random_password.db_password.result
 }
 
-resource "local_sensitive_file" "ssh_public_key_file" {
-  content  = var.ssh_public_key
-  filename = "./ssh_public_key"
-}
+# resource "local_sensitive_file" "ssh_public_key_file" {
+#   content  = var.ssh_public_key
+#   filename = "./ssh_public_key"
+# }
 
 resource "local_sensitive_file" "ssh_private_key_file" {
   content  = var.ssh_private_key
@@ -28,7 +43,7 @@ resource "local_sensitive_file" "ssh_private_key_file" {
 resource "proxmox_vm_qemu" "k3s-db" {
   name        = "${var.cluster_name}-k3s-db"
   desc        = "Kubernetes MariaDB database. User: ${local.db_user} | Password: ${local.db_password} | DB: ${local.db}"
-  target_node = "proxmox"
+  target_node = var.target_node
   onboot      = var.onboot
 
   # Hardware configuration
@@ -40,7 +55,7 @@ resource "proxmox_vm_qemu" "k3s-db" {
   sockets = 1
   cpu     = "host"
   disk {
-    storage = "local"
+    storage = "nvme_pool"
     type    = "virtio"
     size    = var.mariadb_database_size
   }
@@ -69,7 +84,7 @@ resource "proxmox_vm_qemu" "k3s-db" {
     inline = [<<EOF
       sudo docker run -d --name mariadb \
           --restart always \
-          -v /opt/mysql/data:/var/lib/mysql \
+          -v /opt/homebrew/var/mysql:/var/lib/mysql \
           --env MYSQL_USER=${local.db_user} \
           --env MYSQL_PASSWORD=${local.db_password} \
           --env MYSQL_ROOT_PASSWORD=${local.db_password} \

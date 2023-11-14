@@ -9,11 +9,10 @@
 # }
 
 terraform {
-  cloud {
-    organization = "froste"
-    workspaces {
-      name = "homelab-tf"
-    }
+  # comment out this bucket until it gets created on the first run with a local statefile
+  backend "gcs" {
+    bucket = "c6112d4ca9e81dab-bucket-tfstate"
+    prefix = "terraform/state"
   }
   required_providers {
     # https://github.com/Telmate/terraform-provider-proxmox
