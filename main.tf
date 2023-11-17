@@ -83,6 +83,7 @@ resource "proxmox_vm_qemu" "k3s-db" {
     # Start the database using docker
     inline = [<<EOF
       sudo docker run -d --name mariadb \
+          --skip-innodb \
           --restart always \
           -v /opt/homebrew/var/mysql:/var/lib/mysql \
           --env MYSQL_USER=${local.db_user} \
@@ -90,7 +91,7 @@ resource "proxmox_vm_qemu" "k3s-db" {
           --env MYSQL_ROOT_PASSWORD=${local.db_password} \
           --env MYSQL_DATABASE=${local.db} \
           -p ${local.db_port}:3306 \
-          mariadb:latest
+          mariadb:latest --skip-innodb
     EOF
     ]
   }
